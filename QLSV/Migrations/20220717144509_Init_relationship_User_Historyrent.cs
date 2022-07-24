@@ -4,24 +4,26 @@
 
 namespace QLSV.Migrations
 {
-    public partial class Init_relationship_User_RelativeUser : Migration
+    public partial class Init_relationship_User_Historyrent_Room : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
                 name: "UserId",
-                table: "RelativeUsers",
+                table: "HistoryRents",
                 type: "int",
-                nullable: true);
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RelativeUsers_UserId",
-                table: "RelativeUsers",
-                column: "UserId");
+                name: "IX_HistoryRents_UserId",
+                table: "HistoryRents",
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_RelativeUsers_Users_UserId",
-                table: "RelativeUsers",
+                name: "FK_HistoryRents_Users_UserId",
+                table: "HistoryRents",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id",
@@ -31,16 +33,16 @@ namespace QLSV.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_RelativeUsers_Users_UserId",
-                table: "RelativeUsers");
+                name: "FK_HistoryRents_Users_UserId",
+                table: "HistoryRents");
 
             migrationBuilder.DropIndex(
-                name: "IX_RelativeUsers_UserId",
-                table: "RelativeUsers");
+                name: "IX_HistoryRents_UserId",
+                table: "HistoryRents");
 
             migrationBuilder.DropColumn(
                 name: "UserId",
-                table: "RelativeUsers");
+                table: "HistoryRents");
         }
     }
 }

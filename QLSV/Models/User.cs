@@ -12,7 +12,8 @@ namespace QLSV.Models
         public string? Gender { get; set; }
         public string? TelephoneNumber { get; set; }
         public string? Email { get; set; }
-        public List<RelativeUser> RelativeUsers { get; set; }
+        public List<RelativeUser>? RelativeUsers { get; set; }
+        public HistoryRent? HistoryRent { get; set; }
 
     }
 }

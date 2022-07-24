@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QLSV.Models;
 
@@ -11,9 +12,10 @@ using QLSV.Models;
 namespace QLSV.Migrations
 {
     [DbContext(typeof(DormDbContext))]
-    partial class DormDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220721055526_Init01")]
+    partial class Init01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +115,10 @@ namespace QLSV.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Fullname")
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Job")

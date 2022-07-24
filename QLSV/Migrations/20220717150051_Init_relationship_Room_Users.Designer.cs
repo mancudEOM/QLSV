@@ -12,8 +12,8 @@ using QLSV.Models;
 namespace QLSV.Migrations
 {
     [DbContext(typeof(DormDbContext))]
-    [Migration("20220715140329_Init_relationship_User_RelativeUser")]
-    partial class Init_relationship_User_RelativeUser
+    [Migration("20220717150051_Init_relationship_Room_Users")]
+    partial class Init_relationship_Room_Users
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,25 @@ namespace QLSV.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("QLSV.Models.HistoryRent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("HistoryRents");
+                });
 
             modelBuilder.Entity("QLSV.Models.RelativeUser", b =>
                 {
@@ -55,6 +74,33 @@ namespace QLSV.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RelativeUsers");
+                });
+
+            modelBuilder.Entity("QLSV.Models.Rent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DueDateRent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("HistoryRentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Semeter")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDateRent")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HistoryRentId");
+
+                    b.ToTable("Rents");
                 });
 
             modelBuilder.Entity("QLSV.Models.Room", b =>
@@ -108,6 +154,9 @@ namespace QLSV.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -116,7 +165,20 @@ namespace QLSV.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoomId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("QLSV.Models.HistoryRent", b =>
+                {
+                    b.HasOne("QLSV.Models.User", "User")
+                        .WithOne("HistoryRent")
+                        .HasForeignKey("QLSV.Models.HistoryRent", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("QLSV.Models.RelativeUser", b =>
@@ -127,8 +189,36 @@ namespace QLSV.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("QLSV.Models.Rent", b =>
+                {
+                    b.HasOne("QLSV.Models.HistoryRent", null)
+                        .WithMany("Rents")
+                        .HasForeignKey("HistoryRentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("QLSV.Models.User", b =>
                 {
+                    b.HasOne("QLSV.Models.Room", null)
+                        .WithMany("Users")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("QLSV.Models.HistoryRent", b =>
+                {
+                    b.Navigation("Rents");
+                });
+
+            modelBuilder.Entity("QLSV.Models.Room", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("QLSV.Models.User", b =>
+                {
+                    b.Navigation("HistoryRent");
+
                     b.Navigation("RelativeUsers");
                 });
 #pragma warning restore 612, 618

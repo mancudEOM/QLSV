@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QLSV.Models;
 
@@ -11,9 +12,10 @@ using QLSV.Models;
 namespace QLSV.Migrations
 {
     [DbContext(typeof(DormDbContext))]
-    partial class DormDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220717144509_Init_relationship_User_Historyrent_Room")]
+    partial class Init_relationship_User_Historyrent_Room
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,67 +23,6 @@ namespace QLSV.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("QLSV.Models.Bill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ElectricityIndexE")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElectricityIndexS")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HistoryBillId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
-
-                    b.Property<float>("WaterIndexE")
-                        .HasColumnType("real");
-
-                    b.Property<float>("WaterIndexS")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HistoryBillId");
-
-                    b.ToTable("Bill");
-                });
-
-            modelBuilder.Entity("QLSV.Models.HistoryBill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoomId")
-                        .IsUnique();
-
-                    b.ToTable("HistoryBill");
-                });
 
             modelBuilder.Entity("QLSV.Models.HistoryRent", b =>
                 {
@@ -113,7 +54,10 @@ namespace QLSV.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Fullname")
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Job")
@@ -210,9 +154,6 @@ namespace QLSV.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RoomId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -221,28 +162,7 @@ namespace QLSV.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("QLSV.Models.Bill", b =>
-                {
-                    b.HasOne("QLSV.Models.HistoryBill", null)
-                        .WithMany("Bills")
-                        .HasForeignKey("HistoryBillId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("QLSV.Models.HistoryBill", b =>
-                {
-                    b.HasOne("QLSV.Models.Room", "Room")
-                        .WithOne("HistoryBill")
-                        .HasForeignKey("QLSV.Models.HistoryBill", "RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("QLSV.Models.HistoryRent", b =>
@@ -272,29 +192,9 @@ namespace QLSV.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("QLSV.Models.User", b =>
-                {
-                    b.HasOne("QLSV.Models.Room", null)
-                        .WithMany("Users")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("QLSV.Models.HistoryBill", b =>
-                {
-                    b.Navigation("Bills");
-                });
-
             modelBuilder.Entity("QLSV.Models.HistoryRent", b =>
                 {
                     b.Navigation("Rents");
-                });
-
-            modelBuilder.Entity("QLSV.Models.Room", b =>
-                {
-                    b.Navigation("HistoryBill");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("QLSV.Models.User", b =>

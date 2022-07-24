@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QLSV.Models;
 
@@ -11,9 +12,10 @@ using QLSV.Models;
 namespace QLSV.Migrations
 {
     [DbContext(typeof(DormDbContext))]
-    partial class DormDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220720140447_Init_relationship_HistoryBill_Bill")]
+    partial class Init_relationship_HistoryBill_Bill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,10 +77,15 @@ namespace QLSV.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("HistoryBill");
                 });
@@ -113,7 +120,10 @@ namespace QLSV.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Fullname")
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Job")
@@ -242,7 +252,13 @@ namespace QLSV.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("QLSV.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("QLSV.Models.HistoryRent", b =>
